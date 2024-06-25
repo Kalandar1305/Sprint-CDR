@@ -9,8 +9,7 @@ BIN = ./bin
 
 IFLAGS = -I $(INC)
 
-# List all source files for myFunction
-MYFUNCTION_SRCS = CB.c  OP.c dataprocess.c login.c signup.c
+MYFUNCTION_SRCS = CB.c  OP.c data_process.c login.c signup.c
 MYFUNCTION_OBJS = $(patsubst %.c, $(OBJ)/%.o, $(MYFUNCTION_SRCS))
 
 all: client CDR
@@ -22,7 +21,6 @@ $(OBJ)/server.o: $(SRC)/server.c
 	$(CC) $(CFLAGS) $(SRC)/server.c -pthread $(IFLAGS)
 	mv *.o $(OBJ)/
 
-# Compile each source file in myFunction directory separately
 $(OBJ)/%.o: $(SRC)/%.c
 	$(CC) $(CFLAGS) $< -o $@ $(IFLAGS)
 

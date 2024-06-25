@@ -11,7 +11,41 @@
 #define PORTNO 65534 
 #define MAXBUFF 1024
 
+// Debug levels
+#define DEBUG_LEVEL_FATAL 1
+#define DEBUG_LEVEL_INFO  2
+#define DEBUG_LEVEL_WARNING 3
+#define DEBUG_LEVEL_DEBUG  4
 
+// Set the current debug level here
+#define DEBUG_LEVEL DEBUG_LEVEL_DEBUG
+
+// Debug macros
+#if DEBUG_LEVEL >= DEBUG_LEVEL_ERROR
+#define DEBUG_ERROR(msg) fprintf(stderr, "[ERROR] %s\n", msg)
+#else
+#define DEBUG_ERROR(msg)
+#endif
+
+#if DEBUG_LEVEL >= DEBUG_LEVEL_INFO
+#define DEBUG_INFO(msg) fprintf(stderr, "[INFO] %s\n", msg)
+#else
+#define DEBUG_INFO(msg)
+#endif
+
+#if DEBUG_LEVEL >= DEBUG_LEVEL_WARNING
+#define DEBUG_WARNING(msg) fprintf(stderr, "[WARNING] %s\n", msg)
+#else
+#define DEBUG_WARNING(msg)
+#endif
+
+#if DEBUG_LEVEL >= DEBUG_LEVEL_DEBUG
+#define DEBUG_DEBUG(msg) fprintf(stderr, "[DEBUG] %s\n", msg)
+#else
+#define DEBUG_DEBUG(msg)
+#endif
+
+//Create the client for CDR application
 int main()
 {
 	int sfd = 0, retValue=0;
@@ -30,7 +64,7 @@ int main()
 		perror("socket() ");
 		exit(EXIT_FAILURE);
 	}
-	printf("\nSocket created\n");
+	DEBUG_INFO("\nSocket created\n");
 
 	memset(&serv_address,'\0',sizeof(serv_address));
 
@@ -46,7 +80,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	printf("\nClient connected to the server\n");
+	DEBUG_INFO("\nClient connected to the server\n");
 
 	while(1)
 	{
@@ -76,12 +110,12 @@ int main()
 			read(sfd,msg,MAXBUFF);
 			if(strcmp(msg,"1")==0)
 			{
-				printf("\n\nSign up successful!\n\n");
+				DEBUG_INFO("\n\nSign up successful!\n\n");
 				printf("\nPlease login now!\n\n");
 			}
 			else
 			{
-				printf("\n\nSign up failed!\n\n");
+				DEBUG_ERROR("\n\nSign up failed!\n\n");
 			}
 			sleep(3);
 		}
@@ -104,7 +138,7 @@ int main()
 			read(sfd,msg,MAXBUFF);
 			if(atoi(msg)==1)
 			{
-				printf("\n\nLog in successful!\n\n");
+				DEBUG_INFO("\n\nLog in successful!\n\n");
 				sleep(3);
 				while(1)
 				{
@@ -123,18 +157,18 @@ int main()
 							if(atoi(msg)==1)
 							{
 								fflag=1;
-								printf("\n\nProcessing data successful!\n\n");
+								DEBUG_INFO("\n\nProcessing data successful!\n\n");
 								sleep(3);
 							}
 							else if(atoi(msg)==2)
 							{
-								printf("\n\nFailed to process the data!\n\n");
+								DEBUG_ERROR("\n\nFailed to process the data!\n\n");
 								sleep(3);
 							}
 							else
 							{
 								fflag=1;
-								printf("\n\nData already processed!\n\n");
+								DEBUG_INFO("\n\nData already processed!\n\n");
 								sleep(3);
 							}
 						}
@@ -142,7 +176,7 @@ int main()
 						{
 							if(fflag==0)
 							{
-								printf("\n\nPlease process the data first!\n\n");
+								DEBUG_WARNING("\n\nPlease process the data first!\n\n");
 								sleep(3);
 							}
 							else
@@ -175,7 +209,7 @@ int main()
 										read(sfd,msg,MAXBUFF);
 										if(strcmp(msg,"User not exist!")==0)
 										{
-											printf("\n\nUser not exist!\n\n");
+											DEBUG_ERROR("\n\nUser not exist!\n\n");
 											sleep(3);
 										}
 										else
@@ -198,7 +232,7 @@ int main()
 										read(sfd,msg,MAXBUFF);
 										if(strcmp(msg,"failed")==0)
 										{
-											printf("\n\nFailed!\n\n");
+											printf("\n\nWrong MSISDN.\n\n");
 											sleep(3);
 										}
 										else
@@ -210,7 +244,7 @@ int main()
 									}
 									else
 									{
-										printf("\n\nWrong choice!\n\n");
+										DEBUG_WARNING("\n\nWrong choice!\n\n");
 										sleep(3);
 									}
 								}
@@ -244,7 +278,7 @@ int main()
 										{
 											system("clear");
 											printf("\n\nInter operator Billing:\n");
-											printf("\n\n%s\n\n",msg);
+											printf("%s\n\n",msg);
 											sleep(10);
 										}
 									}
@@ -261,19 +295,19 @@ int main()
 										else
 										{
 											system("clear");
-											printf("\n\nInter operator Billing Downloaded Successful!\n\n");
+											printf("\n\nInter Operator Billing Downloaded Successful!\n\n");
 											sleep(5);
 										}
 									}
 									else
 									{
-										printf("\n\nWrong choice!\n\n");
+										DEBUG_WARNING("\n\nWrong Inter operator code.\n\n");
 										sleep(3);
 									}
 								}
 								else
 								{
-									printf("\n\nWrong choice!\n\n");
+									DEBUG_WARNING("\n\nWrong choice!\n\n");
 									bzero(msg,MAXBUFF);
 									sleep(3);
 								}
@@ -283,7 +317,7 @@ int main()
 					else if(atoi(msg)==3)
 					{
 						write(sfd,msg,MAXBUFF);
-						printf("\n\nLog out successful!\n\n");
+						DEBUG_INFO("\n\nLog out successful!\n\n");
 						bzero(msg,MAXBUFF);
 						sleep(3);
 						system("clear");
@@ -291,7 +325,7 @@ int main()
 					}
 					else
 					{
-						printf("\n\nWrong choice!\n\n");
+						DEBUG_WARNING("\n\nWrong choice!\n\n");
 						sleep(3);
 						bzero(msg,MAXBUFF);
 						system("clear");
@@ -300,7 +334,7 @@ int main()
 			}
 			else
 			{
-				printf("\n\nLogin failed!\n\n");
+				DEBUG_ERROR("\n\nLogin failed!\n\n");
 				sleep(3);
 				bzero(msg,MAXBUFF);
 				system("clear");
@@ -318,7 +352,7 @@ int main()
 		else
 		{
 			bzero(msg,MAXBUFF);
-			printf("\n\nWrong choice!\n\n");
+			DEBUG_WARNING("\n\nWrong choice!\n\n");
 			sleep(3);
 			system("clear");
 		}

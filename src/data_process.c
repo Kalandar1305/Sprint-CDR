@@ -1,4 +1,6 @@
-#include<myHeader.h>
+#include<my_header.h>
+
+//Process the data of CDR file for Customer billing.
 void *customerDataProcess(void *cargs)
 {
 	long int n=0;	
@@ -48,6 +50,8 @@ void *customerDataProcess(void *cargs)
    }
    return NULL;
 }
+
+//Process the data of CDR file for Ineter operator billing.
 void *operatorDataProcess(void *oargs)
 {
 	IP *op=(IP*)oargs;
@@ -261,6 +265,7 @@ void *operatorDataProcess(void *oargs)
 
 }
 
+//Perform the data processing for both customer and inter operator using multi threading.
 void dataProcess(struct User *CS,IP *IOS)
 {
 

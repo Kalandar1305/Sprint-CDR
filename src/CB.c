@@ -1,5 +1,7 @@
-#include<myHeader.h>
+#include<my_header.h>
 
+
+//Display the requested customer data
 char * customerbilling(struct User *us,char msisdnc[])
 {
 	int k=0,flag=0;
@@ -156,6 +158,8 @@ char * customerbilling(struct User *us,char msisdnc[])
 	return mkg;
 }
 
+
+//Download the requested customer data in CB.txt file
 char * customerbillingfile(struct User *us,char msisdnc[])
 {
 	int k=0,flag=0;

@@ -1,4 +1,42 @@
-#include <myHeader.h>
+#include <my_header.h>
+
+
+// Debug levels
+#define DEBUG_LEVEL_FATAL 1
+#define DEBUG_LEVEL_INFO  2
+#define DEBUG_LEVEL_WARNING 3
+#define DEBUG_LEVEL_DEBUG  4
+ 
+// Set the current debug level here
+#define DEBUG_LEVEL DEBUG_LEVEL_DEBUG
+ 
+// Debug macros
+#if DEBUG_LEVEL >= DEBUG_LEVEL_ERROR
+#define DEBUG_ERROR(msg) fprintf(stderr, "[ERROR] %s\n", msg)
+#else
+#define DEBUG_ERROR(msg)
+#endif
+ 
+#if DEBUG_LEVEL >= DEBUG_LEVEL_INFO
+#define DEBUG_INFO(msg) fprintf(stderr, "[INFO] %s\n", msg)
+#else
+#define DEBUG_INFO(msg)
+#endif
+ 
+#if DEBUG_LEVEL >= DEBUG_LEVEL_WARNING
+#define DEBUG_WARNING(msg) fprintf(stderr, "[WARNING] %s\n", msg)
+#else
+#define DEBUG_WARNING(msg)
+#endif
+ 
+#if DEBUG_LEVEL >= DEBUG_LEVEL_DEBUG
+#define DEBUG_DEBUG(fmt, ...) fprintf(stderr, "[DEBUG] " fmt "\n", ##__VA_ARGS__)
+#else
+#define DEBUG_DEBUG(fmt, ...)
+#endif
+
+
+//Create the server for the CDR application.
 int main()
 {
 	int sfd = 0, retValue=0, csfd=0;
@@ -21,7 +59,7 @@ int main()
 		perror("socket() ");
 		exit(EXIT_FAILURE);
 	}
-	printf("\nSocket created\n");
+	DEBUG_INFO("\nSocket created\n");
 
 
 	memset(&serv_address,'\0',sizeof(serv_address));
@@ -38,7 +76,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	printf("\nBinded the server\n");
+	DEBUG_INFO("\nBinded the server\n");
 
 	retValue = listen(sfd, 5);
 	
@@ -48,7 +86,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 	
-	printf("\nListening to the clients\n");
+	DEBUG_INFO("\nListening to the clients\n");
 	clientAddlen=sizeof(client_address);
 
 	while(1)
@@ -60,7 +98,7 @@ int main()
 			perror("accept() ");
 			exit(EXIT_FAILURE);
 		}
-		printf("\nGot a new client connection.\n");
+		DEBUG_INFO("\nGot a new client connection.\n");
 		char uid[MAXBUFF]={0,};
 		char upass[MAXBUFF]={0,};
 		
@@ -68,7 +106,7 @@ int main()
 		{
 			bzero(msg,MAXBUFF);
 			read(csfd,msg,MAXBUFF);
-			printf("Message received from client: %s\n",msg);
+			DEBUG_DEBUG("Message received from client: %s", msg);
 			if(atoi(msg)==3)
 			{
 				close(csfd);
@@ -166,7 +204,7 @@ int main()
 						else if(atoi(msg)==2)
 						{
 							bzero(msg,MAXBUFF);
-							strcpy(msg,"\n\n1.Customer Billing\n2.Interoperator Settlement Billing\nChoice: ");
+							strcpy(msg,"\n\n1.Customer Billing\n2.Inter operator  Billing\nChoice: ");
 							write(csfd,msg,strlen(msg));
 							bzero(msg,MAXBUFF);
 							read(csfd,msg,MAXBUFF);
@@ -174,7 +212,7 @@ int main()
 							{
 								bzero(msg,MAXBUFF);
 								strcpy(msg,"\n---------------> CUSTOMER BILLING <--------------\n\n");
-								strcat(msg,"1.Display on screen\n2.Download the  CB.txt\nChoice :\n");
+								strcat(msg,"1.Display on screen\n2.Download the  CB.txt\nChoice: ");
 								write(csfd,msg,strlen(msg));
 								bzero(msg,MAXBUFF);
 								read(csfd,msg,MAXBUFF);
@@ -192,7 +230,6 @@ int main()
 									bzero(msisdn,MAXBUFF);
 									strcpy(msg,customerAck);
 									free(customerAck);
-								//	bzero(customerAck,MAXBUFF);
 									write(csfd,msg,strlen(msg));
 
 								}
@@ -210,7 +247,6 @@ int main()
 									bzero(msisdn,MAXBUFF);
 									strcpy(msg,customerAck);
 									free(customerAck);
-								//	bzero(customerAck,MAXBUFF);
 									write(csfd,msg,strlen(msg));
 								}
 
@@ -219,7 +255,7 @@ int main()
 							{
 								bzero(msg,MAXBUFF);
 								strcpy(msg,"\n----------------> INTER OPERATOR BILLING <---------------");
-								strcat(msg,"\n\n1.Display result on the user screen\n2.Download  IOSB.txt\nChoice : \n");
+								strcat(msg,"\n\n1.Display result on the user screen\n2.Download  IOSB.txt\nChoice : ");
 								write(csfd,msg,strlen(msg));
 								bzero(msg,MAXBUFF);
 								read(csfd,msg,MAXBUFF);
@@ -237,7 +273,6 @@ int main()
 									strcpy(msg,customerAck);
 									bzero(msisdn,MAXBUFF);
 									free(customerAck);
-								//	bzero(customerAck,MAXBUFF);
 									write(csfd,msg,strlen(msg));
 
 								}
@@ -247,7 +282,6 @@ int main()
 									char * customerAck=interoperatorbillingfile(IOS);
 									strcpy(msg,customerAck);
 									free(customerAck);
-							//		bzero(customerAck,MAXBUFF);
 									write(csfd,msg,strlen(msg));
 								}
 								

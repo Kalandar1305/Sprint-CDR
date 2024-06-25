@@ -1,5 +1,6 @@
-#include<myHeader.h>
+#include<my_header.h>
 
+//Validate the login credentials using  user_details.txt file.
 int logIn(char user_name[],char password[])
 {
 	char exist_user_name[MAX_LINE_LENGTH];

@@ -1,5 +1,7 @@
-#include<myHeader.h>
+#include<my_header.h>
 
+
+//Display the Inter operator billing data.
 char * interoperatorbilling(IP *IOS,char mmc[])
 {
 	int k=0;
@@ -11,8 +13,6 @@ char * interoperatorbilling(IP *IOS,char mmc[])
 		if(atol(IOS[k].opmmc)==atol(mmc))
 		{
 			char dum[MAXBUFF]={0,};
-			strcpy(mkg,"\n\nInter operator billing!\n");
-			strcat(mkg,"<---------------------------->\n");
 			strcat(mkg,"\n\nOperator Brand : ");
 			strcat(mkg,IOS[k].opname);
 			strcat(mkg," (");
@@ -62,6 +62,7 @@ char * interoperatorbilling(IP *IOS,char mmc[])
 	return mkg;
 }
 
+//Download the processed Inter operator data in IOSB.txt file.
 char * interoperatorbillingfile(IP *op)
 {
 	FILE *fp=NULL;

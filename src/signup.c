@@ -1,4 +1,6 @@
-#include<myHeader.h>
+#include<my_header.h>
+
+//Performs the signup operation.
 int signUp(char user_name[],char password [])
 {
 	char exist_user_name[MAX_LINE_LENGTH];
